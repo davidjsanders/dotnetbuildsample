@@ -22,7 +22,7 @@ def minor = '08'
 def imageName = ''
 
 podTemplate(containers: [
-    containerTemplate(name: 'dotnetcore', image: 'mcr.microsoft.com/dotnet/core/sdk:2.2', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'dotnetcore', image: 'k8s-master:32084/dotnet/core/sdk:2.2', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'maven', image: 'k8s-master:32080/maven:3.6.1-jdk-11-slim', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'k8s-master:32080/docker:19.03.1-dind', ttyEnabled: true, privileged: true),
   ],
