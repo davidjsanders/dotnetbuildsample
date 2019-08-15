@@ -123,6 +123,15 @@ podTemplate(containers: [
             """
         }
     }
+    stage('Docker save') {
+        container('docker') {
+            sh """
+                mkdir image-tar
+                docker save --output image-tar/${imageName}.tar ${imageName}
+            """
+            archiveArtifacts artifacts: 'image-tar/*.tar', fingerprint: true
+        }
+    }
     stage('Tidy up') {
         container('docker') {
             sh """
