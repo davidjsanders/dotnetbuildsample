@@ -59,11 +59,11 @@ podTemplate(containers: [
             }
         }
     }
-    stage('Execute system tests') {
+    stage('Publish the app') {
         container('dotnetcore') {
             try {
                 sh """
-                    echo "TBD"
+                    dotnet publish -c Release
                 """
             } finally {
                 echo "TBD"
@@ -101,7 +101,7 @@ podTemplate(containers: [
                 sh """
                     docker login -u "${USERNAME}" -p "${PASSWORD}"
                     echo "Building "${imageName}
-                    docker build -t ${imageName} -f vendor/docker/Dockerfile .
+                    docker build -t ${imageName} -f Dockerfile .
                     docker push ${imageName}
                     docker image rm ${imageName}
                 """
