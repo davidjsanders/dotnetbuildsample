@@ -100,18 +100,29 @@ podTemplate(containers: [
             ]) {
                 sh """
                     docker login -u "${USERNAME}" -p "${PASSWORD}"
-                    echo "Building "${imageName}
                     docker build -t ${imageName} -f Dockerfile .
-                    docker push ${imageName}
-                    docker image rm ${imageName}
                 """
             }
         }
     }
-    stage('Tidy up') {
-        container('dotnetcore') {
+    stage('Docker image test') {
+        container('docker') {
             sh """
-                echo "Doing some tidying up :) "
+                docker run --rm -it ${imageName}
+            """
+        }
+    }
+    stage('Docker push') {
+        container('docker') {
+            sh """
+                docker push ${imageName}
+            """
+        }
+    }
+    stage('Tidy up') {
+        container('docker') {
+            sh """
+                docker image rm ${imageName}
             """
         }
     }
