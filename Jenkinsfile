@@ -51,7 +51,7 @@ podTemplate(containers: [
         container('dotnetcore') {
             try {
                 sh """
-                    echo "TBD"
+                    dotnet run
                 """
             } finally {
                 echo "TBD"
@@ -60,7 +60,7 @@ podTemplate(containers: [
         }
     }
     stage('Execute system tests') {
-        container('python') {
+        container('dotnetcore') {
             try {
                 sh """
                     echo "TBD"
