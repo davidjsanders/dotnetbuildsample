@@ -99,6 +99,10 @@ podTemplate(containers: [
                 passwordVariable: 'PASSWORD']
             ]) {
                 sh """
+                    echo "Adding k8s_master  ${env.k8s_master}"
+                    echo "${env.k8s_master}    k8s-master" >> /etc/hosts
+                    echo "Adding daemon.json  ${env.daemon_json}"
+                    echo "${env.daemon_json}" > /etc/docker/daemon.json
                     docker login -u "${USERNAME}" -p "${PASSWORD}"
                     docker build -t ${imageName} -f Dockerfile .
                 """
