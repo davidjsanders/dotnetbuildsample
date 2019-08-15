@@ -20,6 +20,7 @@
 def major = '19'
 def minor = '08'
 def imageName = ''
+def shortName = ''
 
 podTemplate(containers: [
     containerTemplate(name: 'dotnetcore', image: 'k8s-master:32084/dotnet/core/sdk:2.2', ttyEnabled: true, command: 'cat'),
@@ -30,8 +31,10 @@ podTemplate(containers: [
   node(POD_LABEL) {
     stage('Setup environment') {
         if ( (env.BRANCH_NAME).equals('master') ) {
+            shortName = "dotnetsample.${major}.${minor}.${env.BUILD_NUMBER}"
             imageName = "dsanderscan/dotnetsample:${major}.${minor}.${env.BUILD_NUMBER}"
         } else {
+            shortName = "dotnetsample.${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
             imageName = "dsanderscan/dotnetsample:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
         }
         checkout scm
@@ -127,7 +130,7 @@ podTemplate(containers: [
         container('docker') {
             sh """
                 mkdir image-tar
-                docker save --output image-tar/${imageName}.tar ${imageName}
+                docker save --output image-tar/${shortName}.tar ${imageName}
             """
             archiveArtifacts artifacts: 'image-tar/*.tar', fingerprint: true
         }
