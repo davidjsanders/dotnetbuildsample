@@ -108,7 +108,7 @@ podTemplate(containers: [
     stage('Docker image test') {
         container('docker') {
             sh """
-                docker run --rm -it ${imageName}
+                docker run --rm ${imageName}
             """
         }
     }
