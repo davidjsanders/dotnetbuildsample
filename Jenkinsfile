@@ -19,21 +19,21 @@
 
 def major = '19'
 def minor = '08'
-def imageName = 'dsanderscan/dotnetsample:not4use'
+def imageName = ''
 
 podTemplate(containers: [
-    containerTemplate(name: 'dotnetcore', image: 'mcr.microsoft.com/dotnet/core/sdk:2.2', ttyEnabled: true, command: 'redis-server'),
+    containerTemplate(name: 'dotnetcore', image: 'mcr.microsoft.com/dotnet/core/sdk:2.2', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'maven', image: 'k8s-master:32080/maven:3.6.1-jdk-11-slim', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'k8s-master:32080/docker:19.03.1-dind', ttyEnabled: true, privileged: true),
   ],
   ) {
   node(POD_LABEL) {
     stage('Setup environment') {
-        // if ( (env.BRANCH_NAME).equals('master') ) {
-        //     imageName = "dsanderscan/cowbull_webapp:${major}.${minor}.${env.BUILD_NUMBER}"
-        // } else {
-        //     imageName = "dsanderscan/cowbull_webapp:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
-        // }
+        if ( (env.BRANCH_NAME).equals('master') ) {
+            imageName = "dsanderscan/dotnetsample:${major}.${minor}.${env.BUILD_NUMBER}"
+        } else {
+            imageName = "dsanderscan/dotnetsample:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+        }
         checkout scm
         container('dotnetcore') {
             sh """
